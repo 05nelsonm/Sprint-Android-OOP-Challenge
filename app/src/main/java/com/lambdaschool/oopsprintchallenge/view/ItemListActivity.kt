@@ -20,6 +20,7 @@ import com.lambdaschool.oopsprintchallenge.fragment.ItemDetailFragment
 import com.lambdaschool.oopsprintchallenge.model.*
 import com.lambdaschool.oopsprintchallenge.model.Unit
 import com.lambdaschool.oopsprintchallenge.retrofit.AgeOfEmpiresAPI
+import com.lambdaschool.oopsprintchallenge.viewmodel.ItemListViewModel
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list_content.view.*
 import kotlinx.android.synthetic.main.item_list.*
@@ -43,7 +44,6 @@ class ItemListActivity : AppCompatActivity() {
      */
     private var twoPane: Boolean = false
 
-    var ageOfEmpiresApiObjects = mutableListOf<AgeOfEmpiresApiObject>()
     private var viewAdapter: SimpleItemRecyclerViewAdapter? = null
 
     lateinit var ageOfEmpiresAPI: AgeOfEmpiresAPI
@@ -51,8 +51,6 @@ class ItemListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_list)
-
-        ageOfEmpiresApiObjects = mutableListOf()
 
         setSupportActionBar(toolbar)
         toolbar.title = title
@@ -71,7 +69,7 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        viewAdapter = SimpleItemRecyclerViewAdapter(this, ageOfEmpiresApiObjects, twoPane)
+        viewAdapter = SimpleItemRecyclerViewAdapter(this, ItemListViewModel.ageOfEmpiresApiObjects, twoPane)
         recyclerView.adapter = viewAdapter
 
         if (isNetworkConnected()) {
@@ -85,31 +83,29 @@ class ItemListActivity : AppCompatActivity() {
 
         // Add civilizations
         val civilizationIds = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)
-        civilizationIds.shuffle()
         civilizationIds.forEach {
             getCivilizations(it)
         }
 
         // Add structures
         val structuresIds = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)
-        structuresIds.shuffle()
         structuresIds.forEach {
             getStructures(it)
         }
 
         // Add technologies
         val technologiesIds = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)
-        technologiesIds.shuffle()
         technologiesIds.forEach {
             getTechnologies(it)
         }
 
         // Add units
         val unitsIds = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)
-        unitsIds.shuffle()
         unitsIds.forEach {
             getUnits(it)
         }
+
+        ItemListViewModel.ageOfEmpiresApiObjects.shuffle()
     }
 
     fun getCivilizations(id: Int) {
@@ -126,8 +122,10 @@ class ItemListActivity : AppCompatActivity() {
                     civilization?.let {
                         it.id = id
                         it.category = "Civilization"
-                        ageOfEmpiresApiObjects.add(civilization)
-                        viewAdapter?.notifyItemInserted(ageOfEmpiresApiObjects.size - 1)
+                        val listSize = ItemListViewModel.ageOfEmpiresApiObjects.size
+                        ItemListViewModel.ageOfEmpiresApiObjects.add(civilization)
+                        ItemListViewModel.ageOfEmpiresApiObjectsHash.put(listSize, civilization.id)
+                        viewAdapter?.notifyItemInserted(listSize)
                     }
                 }
             }
@@ -148,8 +146,8 @@ class ItemListActivity : AppCompatActivity() {
                     structure?.let {
                         it.id = id
                         it.category = "Structure"
-                        ageOfEmpiresApiObjects.add(structure)
-                        viewAdapter?.notifyItemInserted(ageOfEmpiresApiObjects.size - 1)
+                        ItemListViewModel.ageOfEmpiresApiObjects.add(structure)
+                        viewAdapter?.notifyItemInserted(ItemListViewModel.ageOfEmpiresApiObjects.size - 1)
                     }
                 }
             }
@@ -170,8 +168,8 @@ class ItemListActivity : AppCompatActivity() {
                     technologies?.let {
                         it.id = id
                         it.category = "Technology"
-                        ageOfEmpiresApiObjects.add(technologies)
-                        viewAdapter?.notifyItemInserted(ageOfEmpiresApiObjects.size - 1)
+                        ItemListViewModel.ageOfEmpiresApiObjects.add(technologies)
+                        viewAdapter?.notifyItemInserted(ItemListViewModel.ageOfEmpiresApiObjects.size - 1)
                     }
                 }
             }
@@ -192,8 +190,8 @@ class ItemListActivity : AppCompatActivity() {
                     units?.let {
                         it.id = id
                         it.category = "Unit"
-                        ageOfEmpiresApiObjects.add(units)
-                        viewAdapter?.notifyItemInserted(ageOfEmpiresApiObjects.size - 1)
+                        ItemListViewModel.ageOfEmpiresApiObjects.add(units)
+                        viewAdapter?.notifyItemInserted(ItemListViewModel.ageOfEmpiresApiObjects.size - 1)
                     }
                 }
             }

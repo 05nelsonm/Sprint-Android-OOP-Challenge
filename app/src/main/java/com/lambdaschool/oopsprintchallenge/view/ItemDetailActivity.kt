@@ -6,10 +6,14 @@ import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import android.widget.Toast
 import com.lambdaschool.oopsprintchallenge.R
 import com.lambdaschool.oopsprintchallenge.fragment.ItemDetailFragment
 import com.lambdaschool.oopsprintchallenge.model.AgeOfEmpiresApiObject
+import com.lambdaschool.oopsprintchallenge.viewmodel.ItemListViewModel
 import kotlinx.android.synthetic.main.activity_item_detail.*
+import kotlinx.android.synthetic.main.activity_item_detail.fab
+import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_detail.*
 
 /**
@@ -18,7 +22,10 @@ import kotlinx.android.synthetic.main.item_detail.*
  * item details are presented side-by-side with a list of items
  * in a [ItemListActivity].
  */
-class ItemDetailActivity : AppCompatActivity() {
+class ItemDetailActivity : AppCompatActivity(), ItemDetailFragment.OnItemDetailFragmentInteractionListener {
+    override fun onItemDetailFragmentInteractionListener(item: AgeOfEmpiresApiObject) {
+        Toast.makeText(this, "${item.name} was shown", Toast.LENGTH_SHORT).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +39,7 @@ class ItemDetailActivity : AppCompatActivity() {
             Snackbar.make(view, "Added to Favorites!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
             //ageOfEmpiresObject.category
-            fab.setBackgroundColor(Color.GREEN)
+            //fab.setBackgroundColor(Color.GREEN)
         }
 
         // Show the Up button in the action bar.
@@ -64,7 +71,7 @@ class ItemDetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) =
+    /*override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             android.R.id.home -> {
                 // This ID represents the Home or Up button. In the case of this
@@ -77,5 +84,5 @@ class ItemDetailActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
+        }*/
 }
