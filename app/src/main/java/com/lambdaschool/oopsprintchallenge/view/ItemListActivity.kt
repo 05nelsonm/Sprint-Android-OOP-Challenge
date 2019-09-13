@@ -35,6 +35,7 @@ class ItemListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding = DataBinding
         setContentView(R.layout.activity_item_list)
 
         setSupportActionBar(toolbar)
