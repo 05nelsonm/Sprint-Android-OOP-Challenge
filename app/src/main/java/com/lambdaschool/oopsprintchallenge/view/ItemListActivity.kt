@@ -1,6 +1,9 @@
 package com.lambdaschool.oopsprintchallenge.view
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -8,11 +11,15 @@ import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import com.lambdaschool.oopsprintchallenge.R
 
 import com.lambdaschool.oopsprintchallenge.dummy.DummyContent
 import com.lambdaschool.oopsprintchallenge.fragment.ItemDetailFragment
+import com.lambdaschool.oopsprintchallenge.model.AgeOfEmpiresApiObject
+import com.lambdaschool.oopsprintchallenge.retrofit.AgeOfEmpireAPI
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list_content.view.*
 import kotlinx.android.synthetic.main.item_list.*
@@ -33,10 +40,15 @@ class ItemListActivity : AppCompatActivity() {
      */
     private var twoPane: Boolean = false
 
+    var ageOfEmpiresApiObjects = mutableListOf<AgeOfEmpiresApiObject>()
+
+    lateinit var ageOfEmpireAPI: AgeOfEmpireAPI
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBinding
         setContentView(R.layout.activity_item_list)
+
+        ageOfEmpiresApiObjects = mutableListOf()
 
         setSupportActionBar(toolbar)
         toolbar.title = title
@@ -54,21 +66,19 @@ class ItemListActivity : AppCompatActivity() {
             twoPane = true
         }
 
+        ageOfEmpireAPI = AgeOfEmpireAPI.Factory.create()
+
         setupRecyclerView(item_list)
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter =
-            SimpleItemRecyclerViewAdapter(
-                this,
-                DummyContent.ITEMS,
-                twoPane
-            )
+        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, ageOfEmpiresApiObjects, twoPane)
+
     }
 
     class SimpleItemRecyclerViewAdapter(
         private val parentActivity: ItemListActivity,
-        private val values: List<DummyContent.DummyItem>,
+        private val values: MutableList<AgeOfEmpiresApiObject>,
         private val twoPane: Boolean
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
@@ -106,8 +116,21 @@ class ItemListActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.id
-            holder.contentView.text = item.content
+            //holder.image.setImageDrawable(item.)
+            holder.name.text = item.name
+            holder.button.text = buttonTextFavorite(item.isFavorite)
+            holder.button.setOnClickListener {
+                if (item.isFavorite) {
+                    item.isFavorite = false
+                    holder.button.text = buttonTextFavorite(item.isFavorite)
+                    holder.button.setBackgroundResource(R.color.buttonColor)
+                } else {
+                    item.isFavorite = true
+                    holder.button.text = buttonTextFavorite(item.isFavorite)
+                    holder.button.setBackgroundResource(R.color.colorAccent)
+                }
+            }
+
 
             with(holder.itemView) {
                 tag = item
@@ -115,11 +138,20 @@ class ItemListActivity : AppCompatActivity() {
             }
         }
 
+        fun buttonTextFavorite(boolean: Boolean): String {
+            return if (boolean) {
+                "Favorite"
+            } else {
+                "Unfavorite"
+            }
+        }
+
         override fun getItemCount() = values.size
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val idView: TextView = view.id_text
-            val contentView: TextView = view.content
+            val image: ImageView = view.iv_model_class
+            val name: TextView = view.tv_name
+            val button: Button = view.btn_favorite
         }
     }
 }
