@@ -1,10 +1,11 @@
-package com.lambdaschool.oopsprintchallenge
+package com.lambdaschool.oopsprintchallenge.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.lambdaschool.oopsprintchallenge.R
 import com.lambdaschool.oopsprintchallenge.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import kotlinx.android.synthetic.main.item_detail.view.*

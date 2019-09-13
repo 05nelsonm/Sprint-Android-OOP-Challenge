@@ -1,10 +1,12 @@
-package com.lambdaschool.oopsprintchallenge
+package com.lambdaschool.oopsprintchallenge.view
 
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import com.lambdaschool.oopsprintchallenge.R
+import com.lambdaschool.oopsprintchallenge.fragment.ItemDetailFragment
 import kotlinx.android.synthetic.main.activity_item_detail.*
 
 /**
