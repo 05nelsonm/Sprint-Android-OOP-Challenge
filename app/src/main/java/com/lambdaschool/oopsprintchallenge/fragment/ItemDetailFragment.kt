@@ -79,6 +79,9 @@ class ItemDetailFragment : Fragment() {
         val item = arguments?.getSerializable(ARG_ITEM_ID) as AgeOfEmpiresApiObject
 
         item_detail.text = item.name + "\n\n\n" + item.description()
+        item_detail.setOnClickListener {
+            listener?.onItemDetailFragmentInteractionListener(item)
+        }
     }
 
     interface OnItemDetailFragmentInteractionListener {
