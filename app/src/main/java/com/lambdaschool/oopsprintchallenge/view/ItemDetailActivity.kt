@@ -1,13 +1,16 @@
 package com.lambdaschool.oopsprintchallenge.view
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import com.lambdaschool.oopsprintchallenge.R
 import com.lambdaschool.oopsprintchallenge.fragment.ItemDetailFragment
+import com.lambdaschool.oopsprintchallenge.model.AgeOfEmpiresApiObject
 import kotlinx.android.synthetic.main.activity_item_detail.*
+import kotlinx.android.synthetic.main.item_detail.*
 
 /**
  * An activity representing a single Item detail screen. This
@@ -22,9 +25,14 @@ class ItemDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_item_detail)
         setSupportActionBar(detail_toolbar)
 
+        val bundle: Bundle? = intent.extras
+        val ageOfEmpiresObject = bundle?.getSerializable("blah") as AgeOfEmpiresApiObject
+
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Added to Favorites!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            //ageOfEmpiresObject.category
+            fab.setBackgroundColor(Color.GREEN)
         }
 
         // Show the Up button in the action bar.
@@ -42,14 +50,13 @@ class ItemDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            val fragment = ItemDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(
-                        ItemDetailFragment.ARG_ITEM_ID,
-                        intent.getStringExtra(ItemDetailFragment.ARG_ITEM_ID)
-                    )
-                }
-            }
+            val fragment = ItemDetailFragment()
+            val fragmentBundle = Bundle()
+            fragmentBundle.putSerializable(
+                ItemDetailFragment.ARG_ITEM_ID,
+                ageOfEmpiresObject
+            )
+            fragment.arguments = fragmentBundle
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.item_detail_container, fragment)

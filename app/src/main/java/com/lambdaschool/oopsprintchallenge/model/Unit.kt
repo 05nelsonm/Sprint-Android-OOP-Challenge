@@ -1,14 +1,9 @@
 package com.lambdaschool.oopsprintchallenge.model
 
-import android.graphics.drawable.Drawable
 import com.lambdaschool.oopsprintchallenge.util.stringBuilder
 
-data class Units(
-    override var id: Int,
-    override var name: String?,
-    override var expansion: String,
-    override var drawableName: Drawable?,
-    override var isFavorite: Boolean,
+data class Unit(
+    var isFavorite: Boolean,
     var age: String,
     var created_in: String,
     var build_time: Int,
@@ -19,7 +14,7 @@ data class Units(
     var attack: Int,
     var armor: String,
     var attack_bonus: List<String>
-): AgeOfEmpiresApiObject(id, name, expansion, drawableName, isFavorite) {
+): AgeOfEmpiresApiObject() {
 
     override fun description(): String {
 
